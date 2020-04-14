@@ -1,5 +1,5 @@
 import scrapy
-
+# project name is amazon
 from Amazon.items import mobile_item
 
 
