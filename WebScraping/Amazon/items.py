@@ -7,14 +7,6 @@
 
 import scrapy
 
-
-class AmazonItem(scrapy.Item):
-    # define the fields for your item here like:
-    Name = scrapy.Field()
-    Price = scrapy.Field()
-    Warranty = scrapy.Field()
-    Rating = scrapy.Field()
-
 class mobile_item(scrapy.Item):
     # define the fields for your item here like:
     smartphone_name = scrapy.Field()
