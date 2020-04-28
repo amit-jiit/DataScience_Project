@@ -17,11 +17,9 @@ So, I did topic modelling with LDA (Latent Dirichlet Allocation) and created a d
 It is kinda difficult to gauge how good the LDA model performed solely by looking at the topics it spits out after being trained.
 Lucky for us, there is a metric known as coherence value. Computing the coherence value will tell us how correlated the words in a single topic are. Thus, it is favorable to have a high coherence value which would imply that there is low overlap between topics.
 
-After training with varying hyperparameters, I found that for number of topics = 15, the coherence value was the highest (~0.53).
+After training with varying hyperparameters, I found that for number of topics = 25, the coherence value was the highest (~0.33).
 
 Now, after topic modelling, to find similarity between current document and recently viral ones, we need to convert the articles into vectors with doc2vec.
-
-Finallu, an update function was created, which needs to be called every once in while with new data to update the models (LDA, bigram, doc2vec).
 
 All these features will then be fed to a deep neural net which will then be able to predict the number of views a particular article gets.
   
