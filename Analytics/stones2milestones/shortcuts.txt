@@ -1,0 +1,17 @@
+sheet 4 ( sheet 'Subscription Bought' ) of 'assignment_data' excel file
+
+
+table 4 (Subscription Bought)- values of sheet 4 ( Subscription Bought ) where pricing is  greater than equal to 499
+
+sheet1 = sheet ' Interested Users' of excel file "assignment_data
+
+table1 = sheet ' Interested Users' of excel file "assignment_data
+
+in[23 ] - i have to shift
+
+Sales ( pricing value greater than equal to 499/ )
+
+
+
+
+
