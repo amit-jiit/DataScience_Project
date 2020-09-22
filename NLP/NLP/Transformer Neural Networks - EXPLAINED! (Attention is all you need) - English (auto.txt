@@ -1,0 +1,614 @@
+recurrent neural Nets they are
+
+feed-forward neural networks rolled out
+
+over time as such they deal with
+
+sequence data where the input has some
+
+defined ordering this gives rise to
+
+several types of architectures the first
+
+is vector to sequence models these
+
+neural nets
+
+take in a fixed size vector as input and
+
+it outputs a sequence of any length in
+
+image captioning for example the input
+
+can be a vector representation of an
+
+image and the output sequence is a
+
+sentence that describes the image the
+
+second type is a sequence to vector
+
+model these neural networks taken a
+
+sequences input and spits out a fixed
+
+length vector in sentiment analysis the
+
+movie review is an input and a fixed
+
+size vector is the output indicating how
+
+good or bad this person thought the
+
+movie was sequence to sequence models is
+
+the more popular variant and these
+
+neural networks taken a sequences input
+
+and outputs another sequence so for
+
+example language translation the input
+
+could be a sentence in Spanish and the
+
+output is the translation in English do
+
+you have some time series data to model
+
+well our nen's would be the go-to
+
+however rnns have some problems our nuns
+
+are slow so slow that we use a truncated
+
+version of back propagation to Train it
+
+and even that's too Hardware intense and
+
+also they can't deal with long sequences
+
+very well we get gradients that vanish
+
+and explode if the network is too long
+
+in comes lsdm networks in 1991 that
+
+introduced a long short term memory cell
+
+in place of dumb neurons this cell has a
+
+branch that allows passed information to
+
+skip a lot of the processing of the
+
+current cell and move on to the next
+
+this allows the memory to be retained
+
+for longer sequences now to that second
+
+point we seem to be able to deal with
+
+longer sequences well or are we well
+
+kind of probably if the order of
+
+hundreds of words instead of a thousand
+
+words however to the first point normal
+
+our ends are
+
+but LS TMS are even slower they are more
+
+complex for these RN and LST M networks
+
+input data needs to be passed
+
+sequentially or serially one after the
+
+other
+
+we need inputs of the previous state to
+
+make any operations on the current state
+
+such sequential flow does not make use
+
+of today's GPUs very well which are
+
+designed for parallel computation so
+
+question how can we use parallelization
+
+for sequential data in 2017 the
+
+Transformer neural network architecture
+
+was introduced the network employs an
+
+encoder decoder architecture much like
+
+recurrent neural Nets the difference is
+
+that the input sequence can be passed in
+
+parallel consider translating a sentence
+
+from English to French I'll use this as
+
+a running example throughout the video
+
+with an RNN encoder we pass an input
+
+English sentence one word after the
+
+other the current words hidden state has
+
+dependencies in the previous words
+
+hidden state the word embeddings are
+
+generated one time step at a time with a
+
+transformer encoder on the other hand
+
+there is no concept of time step for the
+
+input we pass in all the words of the
+
+sentence simultaneously and determine
+
+the word embeddings simultaneously so
+
+how is it doing this let's pick a part
+
+the transformer architecture I'll make
+
+multiple passes on the explanation in
+
+the first pass will be like a high
+
+overview and the next rounds we'll get
+
+into more details let's start with input
+
+embeddings computers don't understand
+
+words they get numbers they get vectors
+
+and matrices
+
+the idea is to map every word to a point
+
+in space where similar words in meaning
+
+are physically closer to each other the
+
+space in which they are present is
+
+called an embedding space we could pre
+
+train this embedding space to save time
+
+or even just use an already pre trained
+
+embedding space this embedding space
+
+Maps a word to a vector but the same
+
+word in different sentences may have
+
+different meanings this is where
+
+positional encoders come in it's a
+
+vector that has information on distances
+
+between words and the sentence the
+
+original paper uses a sine and cosine
+
+function to generate this vector but it
+
+could be any reasonable function after
+
+passing the English sentence through the
+
+input embedding and applying the
+
+positional encoding we get word vectors
+
+that have positional information that is
+
+context nice we pass this in to the
+
+encoder block where it goes through a
+
+multi-headed attention layer and a
+
+feed-forward layer okay one at a time
+
+attention it involves answering what
+
+part of the input should I focus on if
+
+we are translating from English to
+
+French and we are doing self attention
+
+that is attention with respect to
+
+oneself the question we want to answer
+
+is how relevant is the ithe word in the
+
+English sentence relevant to other words
+
+in the same English sentence this is
+
+represented in the I thought ention
+
+vector and it is computed in the
+
+attention block for every word we can
+
+have an attention vector generated which
+
+captures contextual relationships
+
+between words in the sentence so that's
+
+great
+
+the other important unit is a
+
+feed-forward net this is just a simple
+
+feed-forward neural network that is
+
+applied to every one of the attention
+
+vectors these feed-forward nets are used
+
+in practice to transform the attention
+
+vectors into a form that is digestible
+
+by the next encoder block or decoder
+
+block now that's the high-level overview
+
+of the encoder components let's talk
+
+about the decoder now during the
+
+training phase for English to French we
+
+feed the output French sentence to the
+
+decoder but remember computers don't get
+
+language they get numbers vectors and
+
+matrices so we process it using the
+
+input embedding to get the vector form
+
+of the word and then we add a positional
+
+vector to get the notion of context of
+
+the word in a sentence we pass this
+
+vector finally into a decoder block that
+
+has three main components two of which
+
+are similar to the encoder block the
+
+self attention block generates attention
+
+vectors for every word in the french
+
+sentence to represent how much
+
+each word is related to every word in
+
+the same sentence these attention
+
+vectors and vectors from the encoder are
+
+passed into another attention block
+
+let's call this the encoder decoder
+
+attention block since we have one vector
+
+from every word in the English and
+
+French sentences this attention block
+
+will determine how related each word
+
+vector is with respect to each other and
+
+this is where the main English to French
+
+word mapping happens the output of this
+
+block is attention vectors for every
+
+word in English and the French sentence
+
+each vector representing the
+
+relationships with other words in both
+
+the languages next we pass each
+
+attention vector to a feed-forward unit
+
+this makes the output vector more
+
+digestible by the next decoder block or
+
+a linear layer now the linear layer is
+
+surprise-surprise
+
+another feed for connected layer it's
+
+used to expand the dimensions into the
+
+number of words in the french language
+
+the softmax layer transforms it into a
+
+probability distribution which is now
+
+human interpretable and the final word
+
+is the word corresponding to the highest
+
+probability overall this decoder
+
+predicts the next word and we execute
+
+this over multiple time steps until the
+
+end of sentence token is generated
+
+that's our first passed over the
+
+explanation of the entire network
+
+architecture for transformers but let's
+
+go over it again but this time introduce
+
+even more details going deeper an input
+
+English sentence is converted into an
+
+embedding to represent meaning we add a
+
+positional vector to get the context of
+
+the word in the sentence our attention
+
+block computes the attention vectors for
+
+each word only problem here is that the
+
+attention vector may not be too strong
+
+for every word the attention vector may
+
+weight its relation with itself much
+
+higher it's true but it's useless we are
+
+more interested in interactions with
+
+different words and so we determine like
+
+eight such attention vectors per word
+
+and take a weighted average to compute
+
+the final attention vector for every
+
+word
+
+since we use multiple attention vectors
+
+we call it the multi-head attention
+
+block the attention vectors are passed
+
+in through a feed-forward net one vector
+
+at a time the cool thing is that each of
+
+the attention nets are independent of
+
+each other so we can use some beautiful
+
+parallelization here because of this we
+
+can pass all our words at the same time
+
+into the encoder block and the output
+
+will be a set of encoded vectors for
+
+every word
+
+now the decoder we first obtained the
+
+embedding of French words to encode
+
+meaning then add the positional value to
+
+retain context they are then passed to
+
+the first attention block the paper
+
+calls this the masked attention block
+
+why is this the case though it's because
+
+while generating the next French word we
+
+can use all the words from the English
+
+sentence but only the previous words of
+
+the French sentence if we are going to
+
+use all the words in the French sentence
+
+then there would be no learning it would
+
+just spit out the next word so while
+
+performing parallelization with matrix
+
+operations we make sure that the matrix
+
+will mask the words appearing later by
+
+transforming it into zeros so the
+
+attention network can't use them the
+
+next detention block which is the
+
+encoder decoder attention block
+
+generates similar attention vectors for
+
+every English and French word these are
+
+passed into the feed-forward layer
+
+linear layer and the softmax layer to
+
+predict the next word that's the past 2
+
+over the architecture explained I hope
+
+you're understanding more and more
+
+details here now for the next pass where
+
+we go even deeper how exactly do these
+
+multi-head attention networks look now
+
+the single headed attention looks like
+
+this QK and V are abstract vectors that
+
+extract different components of an input
+
+word we have QK and V vectors for every
+
+single word we use these to compute the
+
+attention vectors for every word using
+
+this kind of formula for a multi-headed
+
+attention we have multiple weight
+
+matrices
+
+you qwk and WV so we will have multiple
+
+attention vectors Z for every word
+
+however our neural net is only expecting
+
+one attention vector per word so we use
+
+another weighted matrix wz to make sure
+
+that the output is still an attention
+
+vector per word additionally after every
+
+layer we apply some form of
+
+normalization typically we would apply a
+
+patch normalization this movements out
+
+the law surface making it easier to
+
+optimize while using larger learning
+
+rates this is the TLDR but that's what
+
+it does but we can actually use
+
+something called layer normalization
+
+making the normalization across each
+
+feature instead of each sample it's
+
+better for stabilization if you are
+
+interested in dabbling in transformer
+
+code tensorflow has a step-by-step
+
+tutorial that can get you up to speed
+
+transformer neural nets have largely
+
+replaced LS TM nets for sequence to
+
+vector sequence to sequence and vector
+
+to sequence problems Google for example
+
+created Bert which uses transformers to
+
+pre train models for common NLP tasks
+
+read that blog it's good however there
+
+was another paper called pervasive
+
+attention that could be even better than
+
+transformers for sequence to sequence
+
+models although transformers can be
+
+better suited for a wider variety of
+
+problems it's still a very interesting
+
+read I'll link it in the description
+
+below with other resources so check that
+
+out hope this helped you get you up to
+
+speed with transformer neural nets if
+
+you liked the video hit that like button
+
+subscribe to stay up to date with some
+
+deep learning and machine learning
+
+knowledge and I will see you guys in the
+
+next one bye bye
+
